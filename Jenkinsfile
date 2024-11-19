@@ -1,17 +1,14 @@
 pipeline{
-    agent { label 'dev-server' }
-    
+    agent {label "dev1-server"}
     stages{
-        stage("Code Clone"){
+        stage("code clone"){
             steps{
-                echo "Code Clone Stage"
-                git url: "https://github.com/LondheShubham153/node-todo-cicd.git", branch: "master"
+                git url: "https://github.com/PakeezaPakeeza/nodejs-todoapp-CICD.git", branch: "main"
             }
         }
-        stage("Code Build & Test"){
+        stage("code build and test"){
             steps{
-                echo "Code Build Stage"
-                sh "docker build -t node-app ."
+                sh "docker build -t nodejs-notes-app ."
             }
         }
         stage("Push To DockerHub"){
@@ -21,12 +18,12 @@ pipeline{
                     usernameVariable:"dockerHubUser", 
                     passwordVariable:"dockerHubPass")]){
                 sh 'echo $dockerHubPass | docker login -u $dockerHubUser --password-stdin'
-                sh "docker image tag node-app:latest ${env.dockerHubUser}/node-app:latest"
-                sh "docker push ${env.dockerHubUser}/node-app:latest"
+                sh "docker image tag nodejs-notes-app:latest ${env.dockerHubUser}/nodejs-notes-app:latest"
+                sh "docker push ${env.dockerHubUser}/nodejs-notes-app:latest"
                 }
             }
         }
-        stage("Deploy"){
+        stage("code deploy"){
             steps{
                 sh "docker compose down && docker compose up -d --build"
             }
