@@ -3,11 +3,13 @@ pipeline{
     stages{
         stage("code clone"){
             steps{
+                echo "code clone stage"
                 git url: "https://github.com/PakeezaPakeeza/nodejs-todoapp-CICD.git", branch: "main"
             }
         }
         stage("code build and test"){
             steps{
+                echo "code build stage"
                 sh "docker build -t nodejs-notes-app ."
             }
         }
